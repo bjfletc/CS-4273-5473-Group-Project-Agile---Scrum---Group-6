@@ -1,12 +1,29 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="styles.css">
     <title> Reviews </title>
   </head>
   <body>
+    <div class="topnav">
+      <a class ="active" href="home.html">Home</a>
+    </div>
     <h1 id="reviewHeader" class="rightText"> Reviews </h1>
-    <input type="text" id="searchBar" onkeyup="reviewSearch()" placeholder="Search reviews by restaurant...">
+    <select name="searchCriteria" id="searchBy">
+      <option value="restaurant">Search by Restaurant</option>
+      <option value="score">Search by Score</option>
+      <option value="content">Search by Content</option>
+    </select>
+    <input type="text" id="searchBar" placeholder="Search here!">
+    <script>
+      var input = document.getElementById("searchBar");
+      input.addEventListener("keyup", function () {
+        var a = document.getElementById("searchBy").value;
+        reviewSearch(a);
+      });
+
+    </script>
     <h2 id="recentReviewHeader">Recent Reviews</h2>
     <table id="reviewTable" style ="width: 100%">
       <colgroup id="colGroup">
@@ -57,8 +74,11 @@
       </table>
   </body>
   <script>
-  function reviewSearch() {
-    var input, filter, table, row, data, i, searchValue;
+  function reviewSearch(selection) {
+    var input, filter, table, row, data, i, searchValue, s;
+    if (selection === "restaurant") {s = 0;}
+    else if (selection === "score") {s = 1;}
+    else if (selection === "content") {s = 2;}
     input = document.getElementById("searchBar");
     filter = input.value.toUpperCase();
     table = document.getElementById("reviewTable");
@@ -66,7 +86,7 @@
 
     //Looping through all of our table rows and hiding those that don't match the search!
     for(i=0; i < row.length; i++){
-      data = row[i].getElementsByTagName("td")[0];
+      data = row[i].getElementsByTagName("td")[s];
       if (data) {
         searchValue = data.textContent || td.innerText;
         if (searchValue.toUpperCase().indexOf(filter) > -1) {
